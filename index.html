@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="rw">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Umuryango wa Niyokwizerwa • Musanze ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root{
+            --bg:#0a0e1a;--text:#e0e7ff;--card:rgba(20,30,60,0.95);
+            --accent:#60a5fa;--gold:#fbbf24;--shadow:0 20px 60px rgba(0,0,0,0.7);
+        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.9;overflow-x:hidden;transition:all .3s ease}
+        canvas{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1}
+
+        header{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;background:linear-gradient(rgba(0,0,0,0.75),rgba(0,0,0,0.9)),url('https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&q=80') center/cover}
+        header h1{font-family:'Playfair Display',serif;font-size:clamp(4.5rem,11vw,9rem);background:linear-gradient(45deg,#60a5fa,#f472b6,#fbbf24,#34d399,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+        header p{font-size:2.1rem;letter-spacing:6px;color:#fff}
+
+        .controls{position:fixed;top:15px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;gap:12px;padding:12px 24px;background:rgba(0,0,0,0.7);backdrop-filter:blur(16px);border-radius:50px;border:1px solid rgba(255,255,255,0.2)}
+        select,button{padding:10px 20px;background:rgba(255,255,255,0.12);color:#fff;border:none;border-radius:30px;cursor:pointer;font-size:1rem;transition:.25s}
+        select:hover,button:hover{background:var(--accent);color:#000;transform:scale(1.06)}
+
+        .container{max-width:1500px;margin:100px auto 60px;padding:20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:45px}
+        .card{background:var(--card);border-radius:32px;overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,0.12);transition:all .5s}
+        .card:hover{transform:translateY(-20px);box-shadow:0 40px 100px rgba(96,165,250,0.5)}
+        .card img{width:100%;height:480px;object-fit:cover;cursor:pointer;transition:.7s}
+        .card:hover img{transform:scale(1.12)}
+        .info{padding:45px;font-size:1.28rem;text-align:justify}
+        .info h2{font-family:'Cinzel',serif;text-align:center;font-size:2.7rem;margin-bottom:25px;background:linear-gradient(90deg,var(--accent),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+
+        /* Instant language system */
+        [data-lang]:not([data-lang="rw"]){display:none}
+
+        /* Contact */
+        .contact-box{background:rgba(0,0,0,0.7);backdrop-filter:blur(16px);padding:45px;margin:60px auto 40px;max-width:1000px;text-align:center;border:4px solid var(--gold);border-radius:28px;font-size:1.5rem}
+        .contact-box a{color:var(--gold);text-decoration:none;font-weight:700}
+        .contact-box i{color:var(--gold);margin-right:14px}
+
+        footer{text-align:center;padding:120px 20px;font-size:1.8rem;background:#000;color:#aaa}
+
+        /* 8 PERFECT THEMES */
+        body.blue    {--bg:#0a0e1a;--text:#e0e7ff;--card:rgba(20,30,60,0.95);--accent:#60a5fa}
+        body.pink    {--bg:#2d0b2d;--text:#ffd6fa;--card:rgba(90,20,90,0.95);--accent:#f472b6}
+        body.green   {--bg:#0a2e1c;--text:#b5ffd6;--card:rgba(20,90,50,0.95);--accent:#34d399}
+        body.gold    {--bg:#1f1408;--text:#ffe8a3;--card:rgba(90,60,10,0.97);--accent:#fbbf24}
+        body.purple  {--bg:#1a0b2d;--text:#e6d6ff;--card:rgba(90,20,110,0.95);--accent:#a78bfa}
+        body.orange  {--bg:#2d1700;--text:#ffe0b3;--card:rgba(110,50,20,0.95);--accent:#fb923c}
+        body.cyan    {--bg:#0a2e2e;--text:#a3ffff;--card:rgba(20,90,110,0.95);--accent:#22d3ee}
+        body.light   {--bg:#f8fafc;--text:#1e293b;--card:rgba(255,255,255,0.97);--accent:#3b82f6;--shadow:0 20px 60px rgba(0,0,0,0.15)}
+
+        .gold-border{border:4px solid var(--gold)!important}
+        .full-width{grid-column:1/-1}
+    </style>
+</head>
+<body class="blue">
+
+<canvas id="particles"></canvas>
+
+<header>
+    <h1>Umuryango wa Niyokwizerwa</h1>
+    <p>Urukundo • Gukora cyane • Ukwizera • Kumwe iteka</p>
+</header>
+
+<div class="controls">
+    <select id="lang">
+        <option value="rw">Kinyarwanda</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="sw">Kiswahili</option>
+    </select>
+    <button onclick="cycle()">Theme</button>
+</div>
+
+<div class="container">
+
+    <!-- DATA -->
+    <div class="card">
+        <img src="https://via.placeholder.com/800x480/4a148c/ffffff?text=Data+Harerimana+Albert" alt="Data" onclick="this.requestFullscreen()">
+        <div class="info">
+            <h2>Harerimana Albert • Yavukiye 1980</h2>
+            <div data-lang="rw">
+                Albert ntiyigeze ajya kw’ishuri, ariko ubuzima bwamuhereye amasomo akomeye. Mu 1999, afite imyaka 19, yaje i Musanze afite amafaranga 500 gusa n’inyota yo kuba umuntu. Yahingaga imirima kuva kare kugeza nijoro abandi bamusuzugura. Yabikaga buri mutango, yarisaga hasi mu iduka, ntiyigeze aheba n’umunsi umwe. Mu 2005 yaguzwe urugo ruto rwa mbere. Mu 2015 yari afite ibyo agura anagurisha. Ubu 2025 ni umucuruzi uzwi cyane ufite inyubako arimo gukodesha i Musanze, akoresha abantu barenga 47. Ijambo rye: “Niba ukora igihe abandi barara, uzakabaho nk’uko abandi bashaka gusa.”
+            </div>
+            <div data-lang="en">
+                Albert never attended school, but life taught him the hardest lessons. In 1999, at age 19 he arrived in Musanze with only 500 RWF and burning ambition. He farmed from dawn till midnight while others mocked him. He saved every coin, slept on shop floors, never missed a day. In 2005 he bought his first small house. By 2015 he was trading goods. Today 2025 he is a well-known businessman owning rental buildings in Musanze and employing over 47 people. His motto: “Work while others sleep, and you will live as others only dream.”
+            </div>
+            <div data-lang="fr">
+                Albert n’a jamais fréquenté l’école, mais la vie lui a donné les leçons les plus dures. En 1999, à 19 ans, il arrive à Musanze avec seulement 500 Frw et une ambition brûlante. Il cultivait du matin au soir pendant que les autres se moquaient de lui. Il économisait chaque centime, dormait par terre dans les boutiques, n’a jamais manqué un seul jour. En 2005 il achète sa première petite maison. En 2015 il fait du commerce. Aujourd’hui en 2025 il est un homme d’affaires connu, propriétaire d’immeubles locatifs à Musanze et emploie plus de 47 personnes. Sa devise : « Travaille quand les autres dorment, et tu vivras comme les autres rêvent. »
+            </div>
+            <div data-lang="sw">
+                Albert hakuna shule aliyowahi kwenda, lakini maisha yalimfundisha masomo magumu zaidi. 1999 akiwa na miaka 19 alifika Musanze na Frw 500 tu na ndoto kubwa. Alilima shamba tangu alfajiri hadi usiku wakati wengine wanamdhihaki. Aliokoa kila senti, akalala sakafuni ya maduka, hakukosa siku hata moja. 2005 akanunua nyumba yake ya kwanza ndogo. 2015 alikuwa na biashara. Leo 2025 ni mfanyabiashara maarufu, mmiliki wa majengo ya kukodisha Musanze na anaajiri zaidi ya watu 47. Kauli yake: “Fanya kazi wakati wengine wanalala, utaishi kama wengine wanaota tu.”
+            </div>
+        </div>
+    </div>
+
+    <!-- MAMA -->
+    <div class="card">
+        <img src="d:\4N copy\mm.png" alt="Mama" onclick="this.requestFullscreen()">
+        <div class="info">
+            <h2>Nyirabazungu Charlotte • Yavukiye 1985</h2>
+            <div data-lang="rw">
+                Charlotte yabuze mama afite imyaka 17. Ubuzima na nyirakabiri bwari bumeze nabi – yamukoreshaga nk’umugaragu, bamwima ishuri, akenshi araraga ananiwe inzara. Iminsi myinshi yariraga wenyine ariko ntiyemeye ko umubabaro umwangiriza umutima. Yigishije kwisoma mu mapapuro ya kera kandi yigira ubwenge bushingiye ku bihe bibi. Afite imyaka 20 yashakanye na Albert maze inzu yabo niniya bayihindura urugo rwuzuye urukundo n’isesemi. Nta mpamyabumenyi afite, agenzura amafaranga neza kurusha umucungamari uwo ari we wese, kandi afata ibyemezo by’ubwenge byarokoye umuryango inshuro nyinshi. Agomba kare saa kumi n’imwe asenga, ateka ifunguro ryiza kurusha ibindi byose i Musanze.
+            </div>
+            <div data-lang="en">
+                Charlotte lost her mother at 17. Life with her stepmother was terrible — treated like a servant, denied school, often slept hungry. But she refused to let pain destroy her heart. She taught herself to read from old papers and gained wisdom from hardship. At 20 she married Albert and turned their big house into a home filled with love and laughter. She has no diploma but manages money better than any accountant and has saved the family many times with wise decisions. Every morning at 5 AM she prays and cooks the best meals in all of Musanze.
+            </div>
+            <div data-lang="fr">
+                Charlotte a perdu sa mère à 17 ans. La vie avec sa belle-mère était horrible — traitée comme une domestique, privée d’école, souvent couchée le ventre vide. Mais elle a refusé que la douleur brise son cœur. Elle s’est appris à lire sur de vieux papiers et a acquis une sagesse forgée dans l’adversité. À 20 ans elle épouse Albert et transforme leur grande maison en un foyer rempli d’amour et de joie. Sans diplôme, elle gère l’argent mieux que n’importe quel comptable et a sauvé la famille plusieurs fois grâce à ses décisions sages. Tous les matins à 5h elle prie et prépare les meilleurs repas de tout Musanze.
+            </div>
+            <div data-lang="sw">
+                Charlotte alimkosa mama akiwa na miaka 17. Maisha na mama wa kambo yalikuwa mabaya — alitendewa kama mtumishi, alinyimwa shule, mara nyingi alilala akiwa na njaa. Lakini alikataa maumivu yamharibu moyo. Alijifundisha kusoma kwa karatasi za zamani na akapata hekima kutoka kwa shida. Akiwa na miaka 20 alimwoa Albert na akageuza nyumba yao kuwa nyumba iliyojaa upendo na kicheko. Hana diploma lakini anadhibiti pesa vizuri kuliko mhasibu yeyote na ameokoa familia mara kadhaa kwa maamuzi ya hekima. Kila asubuhi saa kumi na moja anaomba na anapika milo bora kuliko yote Musanze.
+            </div>
+        </div>
+    </div>
+
+    <!-- ELISEE -->
+    <div class="card gold-border">
+        <img src="c:\Users\User\Pictures\IMG_20241231_161406.jpg" alt="Elisee" onclick="this.requestFullscreen()">
+        <div class="info">
+            <h2>Niyokwizerwa Elisee • Imfura • 2011</h2>
+            <div data-lang="rw">
+                Elisee ni imfura y’umuryango kandi wigira muri King David Academy muri S3 (G9 BTEC) muri 2025. Ni umubyinnyi w’umwete – yatsinze irushanwa ry’umudiho ry’ishuri 2024 – kandi ni umupirati w’ubwenge wizigirwa wiyigishije ubwe wubatsye iyi website y’umuryango wose afite imyaka 14 gusa! Igihe adabyina Amapiano cyangwa Afrobeats, arakora porogaramu, atsinda amarushanwa ya mudasobwa cyangwa yigisha inshuti Python. Itera imbere mu byigwa bya matematiki na ICT, inzozi ze ni kwiga Computer Science muri MIT no gufungura ishuri ry’ikoranabuhanga n’umudiho mu Rwanda.
+            </div>
+            <div data-lang="en">
+                Elisee is the firstborn and studies at King David Academy in S3 (G9 BTEC) in 2025. She’s an incredible dancer — won the 2024 school dance championship — and a brilliant self-taught programmer who built this entire family website at just 14 years old! When she’s not dancing Amapiano or Afrobeats, she codes, wins computer competitions, or teaches friends Python. She excels in mathematics and ICT. Her dreams: study Computer Science at MIT and open a technology + dance academy in Rwanda.
+            </div>
+            <div data-lang="fr">
+                Elisee est l’aînée et étudie à King David Academy en S3 (G9 BTEC) en 2025. Danseuse exceptionnelle — elle a remporté le championnat de danse de l’école 2024 — et programmeuse autodidacte brillante qui a construit tout ce site familial à seulement 14 ans. Quand elle ne danse pas l’Amapiano ou l’Afrobeats, elle code, gagne des concours informatiques ou enseigne Python à ses amis. Elle excelle en mathématiques et en ICT. Ses rêves : étudier l’informatique à MIT et ouvrir une académie de technologie et de danse au Rwanda.
+            </div>
+            <div data-lang="sw">
+                Elisee ni mzaliwa wa kwanza na anasoma King David Academy S3 (G9 BTEC) 2025. Ni mcheza densi wa ajabu — alishinda shindano la densi la shule 2024 — na mpangaji hodari aliyejifundisha peke yake ambaye aliunda tovuti hii yote ya familia akiwa na miaka 14 tu! Anapokosa kucheza Amapiano au Afrobeats, anapanga programu, anashinda mashindano ya kompyuta au anawafundisha marafiki Python. Anafaulu sana katika hisabati na ICT. Ndoto zake: kusoma Sayansi ya Kompyuta MIT na kufungua akademia ya teknolojia + densi Rwanda.
+            </div>
+        </div>
+    </div>
+
+    <!-- ALBERTINE -->
+    <div class="card">
+        <img src="https://via.placeholder.com/800x480/ff9800/ffffff?text=Albertine+Uwituze" alt="Albertine" onclick="this.requestFullscreen()">
+        <div class="info">
+            <h2>Uwituze Albertine • Yavukiye 2016</h2>
+            <div data-lang="rw">
+                Albertine ni umwamikazi muto w’umunezero w’umuryango. Yiga muri Musanze Green Springs Academy (P5 muri 2025). Atsinda amarushanwa yose y’umudiho gakondo na moderene n’imitimba ye yiza n’ihumure rye. Abarezi bavuga ko arushije ubwenge – itera mu myanya ya mbere 3 mu ishuri. Nyuma y’amasomo akunda gukinira umupira w’amaguru, Roblox n’imizirire yose hamwe na mushiki we mukuru Elisee. Isesemi rye rizura inzu yose umunezero!
+            </div>
+            <div data-lang="en">
+                Albertine is the little queen of joy in our family. She studies at Musanze Green Springs Academy (P5 in 2025). She wins every traditional and modern dance competition with her beautiful moves and bright smile. Teachers say she is extremely intelligent — always in the top 3. After school she loves playing football, Roblox, and games with her big sister Elisee. Her laughter fills the entire house with happiness!
+            </div>
+            <div data-lang="fr">
+                Albertine est la petite reine de la joie dans notre famille. Elle étudie à Musanze Green Springs Academy (P5 en 2025). Elle gagne tous les concours de danse traditionnelle et moderne grâce à ses beaux mouvements et son sourire éclatant. Les professeurs disent qu’elle est extrêmement intelligente — toujours dans le top 3. Après l’école elle adore jouer au football, à Roblox et à tous les jeux avec sa grande sœur Elisee. Son rire remplit toute la maison de bonheur !
+            </div>
+            <div data-lang="sw">
+                Albertine ni malkia mdogo wa furaha katika familia yetu. Anasoma Musanze Green Springs Academy (P5 2025). Anashinda kila shindano la densi za kitamaduni na za kisasa kwa harakati zake nzuri na tabasamu lake angavu. Walimu wanasema ni mwerevu sana — huwa katika nafasi 3 za juu kila wakati. Baada ya shule anapenda kucheza mpira, Roblox na michezo yote pamoja na dada yake mkubwa Elisee. Kicheko chake kinajaza nyumba yote kwa furaha!
+            </div>
+        </div>
+    </div>
+
+    <!-- YOUR MESSAGE -->
+    <div class="card gold-border full-width">
+        <img src="https://via.placeholder.com/1200x480/fbbf24/000000?text=❤️+Ijambo+Ryanjye+❤️" alt="Message" onclick="this.requestFullscreen()">
+        <div class="info" style="text-align:center;font-size:1.48rem;">
+            <h2 style="font-size:3.4rem;">Skojet ni jambo • Ku Mutima</h2>
+            <div data-lang="rw">
+                Muraho yemwe<br><br>
+                Ndashimira Imana cyane kubera buri wese muri twe — Data na Mama bakomeje kudutera inkunga, Elisee umwana usigaye ukora imbuga arenze mubintu bijyanye n’ikoranabuhanga, Albertine umunezero wacu w’umunsi ku munsi.<br><br>
+                Iyi website nziza Elisee yakoze iranshimishije cyane kandi iragaragaza ko dushobora byose iyo dufatanye.<br><br>
+                <strong>Turi umuryango w’inkomezi, w’urukundo, w’inyigisho n’inyenyeri.</strong><br><br>
+                Nzahora ndi hano, ndwanya umurage wacu iteka ryose
+                Nuko rero hari ikindi kinyu cyitwa Skojet nahantu wajya ushaka icumbi kurya kunywa byose ninkomwijuru mumagambo make mwese muhawe ikase .<br><br>
+                — <span style="color:var(--gold);font-size:2.5rem;font-family:'Cinzel',serif;">[Izina ryawe]</span> ❤️
+            </div>
+            <div data-lang="en">
+                Hello my beloved family!<br><br>
+                I thank God so much for every one of you — Dad and Mom who keep supporting us, Elisee our pride in culture and technology, Albertine our daily sunshine.<br><br>
+                This beautiful website built by Elisee fills my heart with joy and shows we can achieve anything together.<br><br>
+                <strong>We are a family of strength, love, lessons and stars.</strong><br><br>
+                I will always be here, carrying our legacy forever.<br><br>
+                — <span style="color:var(--gold);font-size:2.5rem;">[Elisee]</span> ❤️
+            </div>
+            <div data-lang="fr">
+                Bonjour ma famille bien-aimée !<br><br>
+                Je remercie Dieu pour chacun de vous — Papa et Maman qui nous soutiennent sans cesse, Elisee notre fierté en culture et technologie, Albertine notre rayon de soleil quotidien.<br><br>
+                Ce magnifique site créé par Elisee me remplit le cœur de joie et montre que nous pouvons tout accomplir ensemble.<br><br>
+                <strong>Nous sommes une famille de force, d’amour, d’enseignement et d’étoiles.</strong><br><br>
+                Je serai toujours là, portant notre héritage pour toujours.<br><br>
+                — <span style="color:var(--gold);font-size:2.5rem;">[Elisee]</span> ❤️
+            </div>
+            <div data-lang="sw">
+                Habari familia yangu wapendwa!<br><br>
+                Namshukuru Mungu sana kwa kila mmoja wenu — Baba na Mama wanaoendelea kutusaidia, Elisee fahari yetu katika utamaduni na teknolojia, Albertine jua letu la kila siku.<br><br>
+                Tovuti hii nzuri iliyotengenezwa na Elisee inajaza moyo wangu kwa furaha na inaonyesha tunaweza kila kitu tukishirikiana.<br><br>
+                <strong>Tuko familia ya nguvu, upendo, mafundisho na nyota.</strong><br><br>
+                Nitakuwa hapa daima, nikibeba urithi wetu milele.<br><br>
+                — <span style="color:var(--gold);font-size:2.5rem;">[Elisee]</span> ❤️
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- CONTACT - ALWAYS VISIBLE & INSTANT -->
+<div class="contact-box">
+    <h3 style="color:var(--gold);font-size:2.4rem;margin-bottom:25px">Twandikire • Contact Us</h3>
+    <div data-lang="rw">
+        <p>Email: <a href="mailto:cdwelisee@gmail.com">cdwelisee@gmail.com</a></p>
+        <p>Data (Baba): <a href="tel:+250784551382">+250 784 551 382</a></p>
+        <p>Mama: <a href="tel:+250783827333">+250 783 827 333</a></p>
+        <p style="margin-top:25px">Turishimiye cyane kuba muri iki gitabo cy’umuryango wacu! ❤️</p>
+    </div>
+    <div data-lang="en">
+        <p>Email: <a href="mailto:cdwelisee@gmail.com">cdwelisee@gmail.com</a></p>
+        <p>Dad: <a href="tel:+250784551382">+250 784 551 382</a></p>
+        <p>Mom: <a href="tel:+250783827333">+250 783 827 333</a></p>
+        <p style="margin-top:25px">We’re so happy you’re part of our family story! ❤️</p>
+    </div>
+    <div data-lang="fr">
+        <p>Email : <a href="mailto:cdwelisee@gmail.com">cdwelisee@gmail.com</a></p>
+        <p>Papa : <a href="tel:+250784551382">+250 784 551 382</a></p>
+        <p>Maman : <a href="tel:+250783827333">+250 783 827 333</a></p>
+        <p style="margin-top:25px">Nous sommes ravis que vous fassiez partie de notre histoire familiale ! ❤️</p>
+    </div>
+    <div data-lang="sw">
+        <p>Barua pepe: <a href="mailto:cdwelisee@gmail.com">cdwelisee@gmail.com</a></p>
+        <p>Baba: <a href="tel:+250784551382">+250 784 551 382</a></p>
+        <p>Mama: <a href="tel:+250783827333">+250 783 827 333</a></p>
+        <p style="margin-top:25px">Tumefurahi sana kuwa sehemu ya hadithi yetu ya familia! ❤️</p>
+    </div>
+</div>
+
+<footer>
+    © 2025–2026 Umuryango wa Niyokwizerwa • Musanze • Rwanda<br>
+    <span style="color:var(--gold);font-size:2.1rem;">Made with all my heart by Niyokwizerwa Elisee • Imfura ❤️</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+<script>
+    // Particles
+    particlesJS("particles", {particles:{number:{value:90},color:{value:["#60a5fa","#fbbf24","#f472b6","#34d399"]},size:{value:3.5},line_linked:{enable:true,color:"#60a5fa",opacity:0.3},move:{speed:1.8}},interactivity:{events:{onhover:{enable:true,mode:"repulse"}}}});
+
+    // Instant language switch
+    document.getElementById('lang').addEventListener('change', e => {
+        const lang = e.target.value;
+        document.querySelectorAll('[data-lang]').forEach(el => el.style.display = 'none');
+        document.querySelectorAll(`[data-lang="${lang}"]`).forEach(el => el.style.display = 'block');
+    });
+
+    // Instant theme cycle
+    const themes = ['blue','pink','green','gold','purple','orange','cyan','light'];
+    let current = 0;
+    function cycle(){
+        current = (current + 1) % themes.length;
+        document.body.className = themes[current];
+    }
+
+    // Preload all themes for zero lag
+    themes.forEach(t => document.body.classList.add(t));
+    setTimeout(() => document.body.className = 'blue', 20);
+</script>
+</body>
+</html>
